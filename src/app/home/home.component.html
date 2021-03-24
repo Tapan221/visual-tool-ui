@@ -1,0 +1,191 @@
+<style>
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+    .container {
+        min-height: 100%;
+    }
+    button {
+        border-top: double;
+        border-bottom: double;
+        border-right: double;
+        border-left: double;
+    }
+    #container {
+        display: flex;
+    }
+
+    #container section {
+        padding: 10px;
+    }
+
+    .aboutus {
+        background: rgb(243, 239, 239);
+        width: 20%;
+
+    }
+
+    .tripinfo {
+        background: white;
+        width: 75%;
+
+    }
+
+    .heading {
+        background: rgb(213, 218, 214);
+    }
+
+    hr {
+    display: block;
+    height: 2px;
+    border: 0;
+    border-top: 1px solid rgb(15, 2, 2);
+    margin: 1em 0;
+    padding: 0;
+}
+</style>
+
+<div id="container">
+    <section class="aboutus">
+
+        <h1 class="heading">Visualization tool</h1>
+
+        <!--<form style="position: relative;" #contributerData="ngForm" (ngSubmit)="onSubmitContributerDetails(contributerData.value)"-->
+
+
+
+        <div>
+            <input type="file" accept='text/plain' title="Note: Mac users need to click on “Options” and then choose “All Files”." multiple (change)="fileAdded($event)">
+        </div><br />
+
+
+        <p> Visit No:
+            <!--[displayWith]="selectVisitId"-->
+            <mat-slider (change)="update($event)" [(ngModel)]="myModel" min="1" max={{maxVisiId}} step="1" value="1" thumbLabel
+                tickInterval="10"></mat-slider>
+            {{myModel}}
+        </p>
+        <button type="button" (click)="saveDetails()" class="btn btn-primary">Summary</button>
+        <!--button type="reset" (click)="deletePreviousDataSet()" class="btn btn-primary">clear Previous Data</button>
+                    <button type="submit" class="btn btn-primary">Get Summary</button><br>-->
+        <br /><br /><label style="color: rgb(4, 119, 4);" *ngIf="checkSuccessResponse()">{{successMessage}}</label>
+        <label style="color: red;" *ngIf="checkFailureResponse()">{{errorMessage}}</label>
+
+
+
+
+
+    </section>
+
+    <section class="tripinfo">
+        <div id="divChart">
+            <canvas id="mixPlot" height="0"></canvas>
+        </div>
+
+        <div id="divChart">
+            <canvas id="mixExample" height="100"></canvas>
+        </div>
+
+        <div id="divChart">
+            <canvas id="barChart" height="100"></canvas>
+        </div>
+
+       
+
+        <h1 *ngIf="allResultSet">Summary Result</h1>
+        <hr *ngIf="allResultSet"/>
+        <div class="table-responsive-lg">
+            <table *ngIf="allResultSet" class="table" id="customers">
+                <thead class="">
+                    <tr>
+                        <th>SL No</th>
+                        <th>VisitId</th>
+                        <th>Datetime</th>
+                        <th>Recommended Dose (mg)</th>
+                        <th>Last Dose (mg)</th>
+                        <th>Dose Change (mg)</th>
+                        <th>Weight (kg)</th>
+                        <th>Baseline BG (mg/dL)</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let result of allResultSet;let i= index">
+                    <td>{{i+1}}</td>
+                    <td>{{result.visitId}}</td>
+                    <td>{{result.datetime}}</td>
+                    <td>{{result.recommendedDose}}</td>
+                    <td>{{result.lastDose}}</td>
+                    <td>{{result.doseChange}}</td>
+                    <td>{{result.weight}}</td>
+                    <td>{{result.baselineBG}}</td>
+
+                </tr>
+            </table>
+        </div>
+
+        <h1 *ngIf="allResultSet">Computation Detail</h1>
+        <hr *ngIf="allResultSet"/>
+        <div class="table-responsive-lg">
+            <table *ngIf="allResultSet" class="table" id="customers">
+                <thead class="">
+                    <tr>
+                        <th>SL No</th>
+                        <th>VisitId</th>
+                        <th>Datetime</th>
+                        <th>Recommended Dose (mg)</th>
+                        <th>Last Dose (mg)</th>
+                        <th>Kp</th>
+                        <th>Error</th>
+                        <th>Error Deri.</th>
+                        <th>Median FBG(mg/dL)</th>
+                        <th>Adaptive Kp</th>
+                        <th>P</th>
+                        <th>D</th>
+                        <th>PD</th>
+                        <th>PD Round</th>
+                        <th>Adaptive PD</th>
+                        <th>Dose Change (mg)</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let result of allResultSet;let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{result.visitId}}</td>
+                    <td>{{result.datetime}}</td>
+                    <td>{{result.recommendedDose}}</td>
+                    <td>{{result.lastDose}}</td>
+                    <td>{{result.kp}}</td>
+                    <td>{{result.error}}</td>
+                    <td>{{result.errorDeri}}</td>
+                    <td>{{result.medianFbg}}</td>
+                    <td>{{result.adaptiveKp}}</td>
+                    <td>{{result.p}}</td>
+                    <td>{{result.d}}</td>
+                    <td>{{result.pd}}</td>
+                    <td>{{result.pdRound}}</td>
+                    <td>{{result.adaptivePd}}</td>
+                    <td>{{result.doseChange}}</td>
+
+                </tr>
+            </table>
+        </div>
+    </section>
+</div>
